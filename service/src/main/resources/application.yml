@@ -4,3 +4,12 @@ server:
   servlet:
     # Definindo que o contexto da api tera /v1 exemplo: http://localhost:8080/v1
     context-path: /v1
+
+spring:
+  # Configurações Spring JPA (MySQL)
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/realmeet?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    type: com.zaxxer.hikari.HikariDataSource
