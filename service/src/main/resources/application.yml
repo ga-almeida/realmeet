@@ -6,7 +6,9 @@ server:
     context-path: /v1
 
 spring:
-  # Configurações Spring JPA (MySQL)
+  profiles:
+    active: dev
+  # Configurações Spring JPA (MySQL) Local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/realmeet?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true

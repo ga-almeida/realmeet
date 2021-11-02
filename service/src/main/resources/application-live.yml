@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    active: dev
+  # Configurações Spring JPA (MySQL) Prod
+  datasource:
+    url: jdbc:mysql://:3306/realmeet?&serverTimezone=UTC&useSSL=false
+    username: admin
