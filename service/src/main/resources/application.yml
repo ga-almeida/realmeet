@@ -1,0 +1,6 @@
+server:
+  # Rodando o projeto na porta 8080
+  port: 8080
+  servlet:
+    # Definindo que o contexto da api tera /v1 exemplo: http://localhost:8080/v1
+    context-path: /v1
