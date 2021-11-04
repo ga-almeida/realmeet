@@ -8,7 +8,7 @@ server:
 spring:
   profiles:
     active: dev
-  # Configurações Spring JPA (MySQL) Local
+  # Configuraï¿½ï¿½es Spring JPA (MySQL) Local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/realmeet?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
