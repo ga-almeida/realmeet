@@ -6,8 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 public final class ResponseEntityUtils {
 
-    private ResponseEntityUtils() {
-    }
+    private ResponseEntityUtils() {}
 
     public static <T> ResponseEntity<T> ok(T body) {
         return ResponseEntity.status(OK).body(body);

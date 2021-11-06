@@ -21,8 +21,7 @@ public class Room {
     @Column(name = "active", nullable = false)
     private Boolean active;
 
-    public Room() {
-    }
+    public Room() {}
 
     private Room(Long id, String name, Integer seats, Boolean active) {
         this.id = id;
@@ -64,10 +63,10 @@ public class Room {
         if (o == null || getClass() != o.getClass()) return false;
         Room room = (Room) o;
         return (
-                Objects.equals(id, room.id) &&
-                        Objects.equals(name, room.name) &&
-                        Objects.equals(seats, room.seats) &&
-                        Objects.equals(active, room.active)
+            Objects.equals(id, room.id) &&
+            Objects.equals(name, room.name) &&
+            Objects.equals(seats, room.seats) &&
+            Objects.equals(active, room.active)
         );
     }
 
@@ -78,14 +77,7 @@ public class Room {
 
     @Override
     public String toString() {
-        return (
-                "Room{" +
-                        "id=" + id +
-                        ", name='" + name + '\'' +
-                        ", seats=" + seats +
-                        ", active=" + active +
-                        '}'
-        );
+        return ("Room{" + "id=" + id + ", name='" + name + '\'' + ", seats=" + seats + ", active=" + active + '}');
     }
 
     public static final class Builder {
@@ -94,8 +86,7 @@ public class Room {
         private Integer seats;
         private Boolean active;
 
-        private Builder() {
-        }
+        private Builder() {}
 
         public Builder id(Long id) {
             this.id = id;

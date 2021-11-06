@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RoomService {
-
     private RoomRepository roomRepository;
     private final RoomMapper roomMapper;
 
