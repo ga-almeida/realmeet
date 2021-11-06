@@ -1,26 +1,29 @@
-package br.com.sw2you.realmeet;
+package br.com.sw2you.realmeet.controller;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import br.com.sw2you.realmeet.api.facade.RoomsApi;
 import br.com.sw2you.realmeet.api.model.RoomDTO;
-import br.com.sw2you.realmeet.mapper.RoomMapper;
 import br.com.sw2you.realmeet.service.RoomService;
+import br.com.sw2you.realmeet.util.ResponseEntityUtils;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RoomController implements RoomsApi {
 
+    private final Executor controllersExecutor;
     private final RoomService roomService;
 
-    public RoomController(RoomService roomService, RoomMapper roomMapper) {
+    public RoomController(Executor controllersExecutor, RoomService roomService) {
+        this.controllersExecutor = controllersExecutor;
         this.roomService = roomService;
     }
 
     @Override
     public CompletableFuture<ResponseEntity<RoomDTO>> find(Long id) {
-        return supplyAsync(() -> ResponseEntity.ok(roomService.find(id)));
+        return supplyAsync(() -> roomService.find(id), controllersExecutor).thenApply(ResponseEntityUtils::ok);
     }
 }
