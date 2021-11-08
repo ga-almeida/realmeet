@@ -25,13 +25,13 @@ public class RoomService {
         requireNonNull(id);
         Room room = roomRepository.findByIdAndActive(id, true).orElseThrow(() -> new RoomNotFoundException(id));
 
-        return roomMapper.fromEntityToDTO(room);
+        return roomMapper.fromEntityToDto(room);
     }
 
     public RoomDTO create(CreateRoomDTO createRoomDTO) {
-        var room = newBuilder().seats(createRoomDTO.getSeats()).name(createRoomDTO.getName()).build();
+        var room = roomMapper.fromCreateRoomDtoToEntity(createRoomDTO);
         roomRepository.saveAndFlush(room);
 
-        return roomMapper.fromEntityToDTO(room);
+        return roomMapper.fromEntityToDto(room);
     }
 }
