@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: dev
   # Configurações Spring JPA (MySQL) Prod
   datasource:
     url: jdbc:mysql://realmeet-db.co692wrinyjb.us-east-1.rds.amazonaws.com:3306/realmeet?&serverTimezone=UTC&useSSL=false
