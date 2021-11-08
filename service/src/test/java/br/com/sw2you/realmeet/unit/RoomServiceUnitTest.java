@@ -4,32 +4,32 @@ import static br.com.sw2you.realmeet.utils.MapperUtils.roomMapper;
 import static br.com.sw2you.realmeet.utils.TestConstants.DEFAULT_ROOM_ID;
 import static br.com.sw2you.realmeet.utils.TestDataCreator.newRoomBuilder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 import br.com.sw2you.realmeet.core.BaseUnitTest;
-import br.com.sw2you.realmeet.mapper.RoomMapper;
+import br.com.sw2you.realmeet.domain.repository.RoomRepository;
+import br.com.sw2you.realmeet.service.RoomService;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
-class RoomMapperUnitTest extends BaseUnitTest {
+class RoomServiceUnitTest extends BaseUnitTest {
+    private RoomService victim;
 
-    private RoomMapper victim;
+    @Mock
+    private RoomRepository roomRepository;
 
-    /**
-     * Essa anotação vai fazer com que esse método seja executado
-     * toda vez antes de cada teste.
-     */
     @BeforeEach
     void setupEach() {
-        victim = roomMapper();
+        victim = new RoomService(roomRepository, roomMapper());
     }
 
-    /**
-     * Anotação utilizada para atribuir a função como um teste
-     */
     @Test
-    void testFromEntityToDto() {
+    void testFind() {
         var room = newRoomBuilder().id(DEFAULT_ROOM_ID).build();
-        var dto = victim.fromEntityToDTO(room);
+        when(roomRepository.findById(DEFAULT_ROOM_ID)).thenReturn(Optional.of(room));
+        var dto = victim.find(DEFAULT_ROOM_ID);
 
         assertEquals(room.getId(), dto.getId());
         assertEquals(room.getName(), dto.getName());
