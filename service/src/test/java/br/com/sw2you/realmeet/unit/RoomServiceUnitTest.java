@@ -28,7 +28,7 @@ class RoomServiceUnitTest extends BaseUnitTest {
     @Test
     void testFind() {
         var room = newRoomBuilder().id(DEFAULT_ROOM_ID).build();
-        when(roomRepository.findById(DEFAULT_ROOM_ID)).thenReturn(Optional.of(room));
+        when(roomRepository.findByIdAndActive(DEFAULT_ROOM_ID, true)).thenReturn(Optional.of(room));
         var dto = victim.find(DEFAULT_ROOM_ID);
 
         assertEquals(room.getId(), dto.getId());
