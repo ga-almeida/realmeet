@@ -19,25 +19,27 @@ public class RoomValidator {
     public void validate(CreateRoomDTO createRoomDTO) {
         var validationErrors = new ValidationErrors();
 
-        validateRequired(createRoomDTO.getName(), ROOM_NAME, validationErrors);
-        validateMaxLength(createRoomDTO.getName(), ROOM_NAME, ROOM_NAME_MAX_LENGTH, validationErrors);
-
-        validateRequired(createRoomDTO.getSeats(), ROOM_SEATS, validationErrors);
-        validateMinValue(createRoomDTO.getSeats(), ROOM_SEATS, ROOM_SEATS_MIN_VALUE, validationErrors);
-        validateMaxValue(createRoomDTO.getSeats(), ROOM_SEATS, ROOM_SEATS_MAX_VALUE, validationErrors);
+        validateName(createRoomDTO.getName(), validationErrors);
+        validateSeats(createRoomDTO.getSeats(), validationErrors);
 
         throwOnError(validationErrors);
-
-        validateNameDuplicate(createRoomDTO.getName());
     }
 
-    private void validateNameDuplicate(String name) {
+    private void validateSeats(Integer seats, ValidationErrors validationErrors) {
+        validateRequired(seats, ROOM_SEATS, validationErrors);
+        validateMinValue(seats, ROOM_SEATS, ROOM_SEATS_MIN_VALUE, validationErrors);
+        validateMaxValue(seats, ROOM_SEATS, ROOM_SEATS_MAX_VALUE, validationErrors);
+    }
+
+    private void validateName(String name, ValidationErrors validationErrors) {
+        validateRequired(name, ROOM_NAME, validationErrors);
+        validateMaxLength(name, ROOM_NAME, ROOM_NAME_MAX_LENGTH, validationErrors);
+        validateNameDuplicate(name, validationErrors);
+    }
+
+    private void validateNameDuplicate(String name, ValidationErrors validationErrors) {
         roomRepository
             .findByNameAndActive(name, true)
-            .ifPresent(
-                __ -> {
-                    throw new InvalidRequestException(new ValidationError(ROOM_NAME, ROOM_NAME + DUPLICATE));
-                }
-            );
+            .ifPresent(__ -> validationErrors.add(ROOM_NAME, ROOM_NAME + DUPLICATE));
     }
 }
