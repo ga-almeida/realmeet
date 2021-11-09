@@ -16,7 +16,7 @@ public class ValidationErrors implements Streamable<ValidationError> {
         return add(new ValidationError(field, errorCode));
     }
 
-    private ValidationErrors add(ValidationError validationError) {
+    public ValidationErrors add(ValidationError validationError) {
         validationErrorList.add(validationError);
         return this;
     }
