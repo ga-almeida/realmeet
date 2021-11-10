@@ -11,6 +11,7 @@ import br.com.sw2you.realmeet.exception.RoomNotFoundException;
 import br.com.sw2you.realmeet.mapper.RoomMapper;
 import br.com.sw2you.realmeet.validator.RoomValidator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RoomService {
@@ -37,6 +38,7 @@ public class RoomService {
         return roomMapper.fromEntityToDto(room);
     }
 
+    @Transactional
     public void delete(Long id) {
         getActiveRoomOrThrow(id);
         roomRepository.deactivate(id);
