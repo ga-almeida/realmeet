@@ -19,4 +19,8 @@ public final class ResponseEntityUtils {
     public static <T> ResponseEntity<T> notFound() {
         return ResponseEntity.status(NOT_FOUND).build();
     }
+
+    public static <T> ResponseEntity<T> noContent() {
+        return ResponseEntity.status(NO_CONTENT).build();
+    }
 }
