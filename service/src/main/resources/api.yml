@@ -29,6 +29,33 @@ paths:
         404:
           description: Not Found
 
+    put:
+      summary: 'Update a room by ID'
+      operationId: update
+      tags:
+        - room
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRoomDTO'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the room
+          schema:
+            type: integer
+            format: int64
+      responses:
+        204:
+          description: Updated success
+        404:
+          description: Not Found
+        422:
+          $ref: '#/components/responses/UnprocessableEntity'
+
     delete:
       summary: 'Delete a room by ID'
       operationId: delete
@@ -68,7 +95,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/RoomDTO'
         422:
-          description: Created
           $ref: '#/components/responses/UnprocessableEntity'
 
 components:
@@ -90,6 +116,11 @@ components:
           type: string
         seats:
           type: integer
+
+    UpdateRoomDTO:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateRoomDTO'
 
     ResponseError:
       type: object
