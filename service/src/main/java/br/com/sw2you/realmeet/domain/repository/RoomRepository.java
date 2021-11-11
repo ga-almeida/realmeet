@@ -17,4 +17,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update Room r set r.active = false where r.id = :id")
     void deactivate(@Param("id") Long id);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("update Room r set r.name = :name, r.seats = :seats where r.id = :id")
+    void update(@Param("id") Long id, @Param("name") String name, @Param("seats") Integer seats);
 }
