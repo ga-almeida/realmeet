@@ -16,6 +16,7 @@ public class Allocation {
     @JoinColumn(name = "room_id")
     private Room room;
 
+    @Embedded
     private Employee employee;
 
     @Column(name = "subject")
@@ -83,7 +84,16 @@ public class Allocation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Allocation that = (Allocation) o;
-        return Objects.equals(id, that.id) && Objects.equals(room, that.room) && Objects.equals(employee, that.employee) && Objects.equals(subject, that.subject) && Objects.equals(startAt, that.startAt) && Objects.equals(endAt, that.endAt) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+        return (
+            Objects.equals(id, that.id) &&
+            Objects.equals(room, that.room) &&
+            Objects.equals(employee, that.employee) &&
+            Objects.equals(subject, that.subject) &&
+            Objects.equals(startAt, that.startAt) &&
+            Objects.equals(endAt, that.endAt) &&
+            Objects.equals(createdAt, that.createdAt) &&
+            Objects.equals(updatedAt, that.updatedAt)
+        );
     }
 
     @Override
@@ -93,16 +103,27 @@ public class Allocation {
 
     @Override
     public String toString() {
-        return "Allocation{" +
-                "id=" + id +
-                ", room=" + room +
-                ", employee=" + employee +
-                ", subject='" + subject + '\'' +
-                ", startAt=" + startAt +
-                ", endAt=" + endAt +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
+        return (
+            "Allocation{" +
+            "id=" +
+            id +
+            ", room=" +
+            room +
+            ", employee=" +
+            employee +
+            ", subject='" +
+            subject +
+            '\'' +
+            ", startAt=" +
+            startAt +
+            ", endAt=" +
+            endAt +
+            ", createdAt=" +
+            createdAt +
+            ", updatedAt=" +
+            updatedAt +
+            '}'
+        );
     }
 
     public static Builder newBuilder() {
@@ -119,8 +140,7 @@ public class Allocation {
         private OffsetDateTime createdAt;
         private OffsetDateTime updatedAt;
 
-        private Builder() {
-        }
+        private Builder() {}
 
         public Builder id(Long id) {
             this.id = id;
