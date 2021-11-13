@@ -43,6 +43,6 @@ public class RoomController implements RoomsApi {
     @Override
     public CompletableFuture<ResponseEntity<Void>> update(Long id, UpdateRoomDTO updateRoomDTO) {
         return runAsync(() -> roomService.update(id, updateRoomDTO), controllersExecutor)
-                .thenApply(ResponseEntityUtils::noContent);
+            .thenApply(ResponseEntityUtils::noContent);
     }
 }
