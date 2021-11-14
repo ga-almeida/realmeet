@@ -1,5 +1,7 @@
 package br.com.sw2you.realmeet.utils;
 
+import static br.com.sw2you.realmeet.util.DateUtils.now;
+
 import java.time.OffsetDateTime;
 
 public final class TestConstants {
@@ -11,7 +13,7 @@ public final class TestConstants {
     public static final String DEFAULT_ALLOCATION_SUBJECT = "Some Subject";
     public static final String DEFAULT_ALLOCATION_NAME = "Jhon Doe";
     public static final String DEFAULT_ALLOCATION_EMAIL = "jhondoe@email.com";
-    public static final OffsetDateTime DEFAULT_ALLOCATION_START_AT = OffsetDateTime.now().plusDays(1);
+    public static final OffsetDateTime DEFAULT_ALLOCATION_START_AT = now().plusDays(1);
     public static final OffsetDateTime DEFAULT_ALLOCATION_END_AT = DEFAULT_ALLOCATION_START_AT.plusHours(1);
     public static final Long DEFAULT_ALLOCATION_ROOM_ID = DEFAULT_ROOM_ID;
 
