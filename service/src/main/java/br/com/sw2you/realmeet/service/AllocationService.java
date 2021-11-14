@@ -6,6 +6,7 @@ import br.com.sw2you.realmeet.domain.entity.Allocation;
 import br.com.sw2you.realmeet.domain.entity.Room;
 import br.com.sw2you.realmeet.domain.repository.AllocationRepository;
 import br.com.sw2you.realmeet.domain.repository.RoomRepository;
+import br.com.sw2you.realmeet.exception.RoomNotFoundException;
 import br.com.sw2you.realmeet.mapper.AllocationMapper;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +27,13 @@ public class AllocationService {
     }
 
     public AllocationDTO create(CreateAllocationDTO createAllocationDTO) {
-        Allocation allocation = allocationMapper.fromCreateAllocationDtoToEntity(createAllocationDTO, new Room());
-        allocationRepository.saveAndFlush(allocation);
+        var room = roomRepository.findById(createAllocationDTO.getRoomId())
+            .orElseThrow(() -> new RoomNotFoundException(createAllocationDTO.getRoomId()));
+
+        var allocation = allocationMapper.fromCreateAllocationDtoToEntity(createAllocationDTO, room);
+
+        allocationRepository.save(allocation);
+
         return allocationMapper.fromEntityToDto(allocation);
     }
 }
