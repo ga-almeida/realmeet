@@ -8,6 +8,7 @@ import br.com.sw2you.realmeet.domain.repository.AllocationRepository;
 import br.com.sw2you.realmeet.domain.repository.RoomRepository;
 import br.com.sw2you.realmeet.exception.RoomNotFoundException;
 import br.com.sw2you.realmeet.mapper.AllocationMapper;
+import br.com.sw2you.realmeet.validator.AllocationValidator;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,18 +16,23 @@ public class AllocationService {
     private final AllocationRepository allocationRepository;
     private final RoomRepository roomRepository;
     private final AllocationMapper allocationMapper;
+    private final AllocationValidator allocationValidator;
 
     public AllocationService(
         AllocationRepository allocationRepository,
         RoomRepository roomRepository,
-        AllocationMapper allocationMapper
+        AllocationMapper allocationMapper,
+        AllocationValidator allocationValidator
     ) {
         this.allocationRepository = allocationRepository;
         this.roomRepository = roomRepository;
         this.allocationMapper = allocationMapper;
+        this.allocationValidator = allocationValidator;
     }
 
     public AllocationDTO create(CreateAllocationDTO createAllocationDTO) {
+        allocationValidator.validate(createAllocationDTO);
+
         var room = roomRepository.findById(createAllocationDTO.getRoomId())
             .orElseThrow(() -> new RoomNotFoundException(createAllocationDTO.getRoomId()));
 
