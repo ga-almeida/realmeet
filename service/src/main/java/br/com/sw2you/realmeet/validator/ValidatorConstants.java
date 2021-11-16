@@ -10,7 +10,9 @@ public final class ValidatorConstants {
     public static final String ALLOCATION_SUBJECT = "subject";
     public static final int ALLOCATION_SUBJECT_MAX_LENGTH = 60;
     public static final String ALLOCATION_EMPLOYEE_NAME = "employeeName";
+    public static final int ALLOCATION_EMPLOYEE_NAME_MAX_LENGTH = 20;
     public static final String ALLOCATION_EMPLOYEE_EMAIL = "employeeEmail";
+    public static final int ALLOCATION_EMPLOYEE_EMAIL_MAX_LENGTH = 30;
     public static final String ALLOCATION_ROOM_ID = "roomId";
     public static final String ALLOCATION_START_AT = "startAt";
     public static final String ALLOCATION_END_AT = "endAt";
