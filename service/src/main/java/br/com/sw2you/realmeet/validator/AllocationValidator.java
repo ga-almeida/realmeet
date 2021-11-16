@@ -5,6 +5,7 @@ import static br.com.sw2you.realmeet.validator.ValidatorUtils.*;
 
 import br.com.sw2you.realmeet.api.model.CreateAllocationDTO;
 import br.com.sw2you.realmeet.domain.repository.AllocationRepository;
+import java.time.OffsetDateTime;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,6 +22,7 @@ public class AllocationValidator {
         validateSubject(createAllocationDTO.getSubject(), validationErrors);
         validateEmployeeName(createAllocationDTO.getEmployeeName(), validationErrors);
         validateEmployeeEmail(createAllocationDTO.getEmployeeEmail(), validationErrors);
+        validateDates(createAllocationDTO.getStartAt(), createAllocationDTO.getEndAt(), validationErrors);
 
         throwOnError(validationErrors);
     }
@@ -38,5 +40,11 @@ public class AllocationValidator {
     private void validateEmployeeEmail(String employeeEmail, ValidationErrors validationErrors) {
         validateRequired(employeeEmail, ALLOCATION_EMPLOYEE_EMAIL, validationErrors);
         validateMaxLength(employeeEmail, ALLOCATION_EMPLOYEE_EMAIL, ALLOCATION_EMPLOYEE_EMAIL_MAX_LENGTH, validationErrors);
+    }
+
+    private void validateDates(OffsetDateTime startAt, OffsetDateTime endAt, ValidationErrors validationErrors) {
+        validateRequired(startAt, ALLOCATION_START_AT, validationErrors);
+        validateRequired(endAt, ALLOCATION_END_AT, validationErrors);
+        validateDateOrdering(startAt, endAt, ALLOCATION_DATES, validationErrors);
     }
 }

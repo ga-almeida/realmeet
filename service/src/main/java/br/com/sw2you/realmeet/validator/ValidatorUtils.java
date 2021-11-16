@@ -5,6 +5,7 @@ import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import br.com.sw2you.realmeet.exception.InvalidRequestException;
+import java.time.OffsetDateTime;
 
 public final class ValidatorUtils {
 
@@ -70,6 +71,20 @@ public final class ValidatorUtils {
     ) {
         if (!isNull(field) && field < minValue) {
             validationErrors.add(fieldName, fieldName + BELOW_MIN_VALUE);
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean validateDateOrdering(
+            OffsetDateTime startAt,
+            OffsetDateTime endAt,
+            String fieldName,
+            ValidationErrors validationErrors
+    ) {
+        if (!isNull(startAt) && !isNull(endAt) && (startAt.isEqual(endAt) || startAt.isAfter(endAt))) {
+            validationErrors.add(fieldName, fieldName + INCONSISTENT);
             return false;
         }
 
