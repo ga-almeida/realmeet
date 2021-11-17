@@ -48,5 +48,10 @@ public class AllocationValidator {
         validateRequired(endAt, ALLOCATION_END_AT, validationErrors);
         validateDateInTheFuture(endAt, ALLOCATION_END_AT, validationErrors);
         validateDateOrdering(startAt, endAt, ALLOCATION_DATES, validationErrors);
+        validateDuration(startAt, endAt, ALLOCATION_DATES, validationErrors);
+    }
+
+    private void validateIfTimeAvailable(OffsetDateTime startAt, OffsetDateTime endAt, ValidationErrors validationErrors) {
+        //TODO: adicionar validação caso exista algum horario ja agendado naquele timestamp
     }
 }

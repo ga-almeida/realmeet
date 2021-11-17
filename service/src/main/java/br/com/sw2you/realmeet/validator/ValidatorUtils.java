@@ -2,10 +2,12 @@ package br.com.sw2you.realmeet.validator;
 
 import static br.com.sw2you.realmeet.util.DateUtils.now;
 import static br.com.sw2you.realmeet.validator.ValidatorConstants.*;
+import static java.time.Duration.between;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import br.com.sw2you.realmeet.exception.InvalidRequestException;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 
 public final class ValidatorUtils {
@@ -99,6 +101,20 @@ public final class ValidatorUtils {
     ) {
         if (!isNull(date) && date.isBefore(now())) {
             validationErrors.add(fieldName, fieldName + IN_THE_PAST);
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean validateDuration(
+            OffsetDateTime startAt,
+            OffsetDateTime endAt,
+            String fieldName,
+            ValidationErrors validationErrors
+    ) {
+        if (!isNull(startAt) && !isNull(endAt) && (between(startAt, endAt).getSeconds() > ALLOCATION_MAX_DURATION_SECONDS)) {
+            validationErrors.add(fieldName, fieldName + EXCEEDS_DURATION);
             return false;
         }
 
