@@ -44,7 +44,9 @@ public class AllocationValidator {
 
     private void validateDates(OffsetDateTime startAt, OffsetDateTime endAt, ValidationErrors validationErrors) {
         validateRequired(startAt, ALLOCATION_START_AT, validationErrors);
+        validateDateInTheFuture(startAt, ALLOCATION_START_AT, validationErrors);
         validateRequired(endAt, ALLOCATION_END_AT, validationErrors);
+        validateDateInTheFuture(endAt, ALLOCATION_END_AT, validationErrors);
         validateDateOrdering(startAt, endAt, ALLOCATION_DATES, validationErrors);
     }
 }

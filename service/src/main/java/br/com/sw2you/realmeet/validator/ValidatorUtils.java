@@ -1,5 +1,6 @@
 package br.com.sw2you.realmeet.validator;
 
+import static br.com.sw2you.realmeet.util.DateUtils.now;
 import static br.com.sw2you.realmeet.validator.ValidatorConstants.*;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -85,6 +86,19 @@ public final class ValidatorUtils {
     ) {
         if (!isNull(startAt) && !isNull(endAt) && (startAt.isEqual(endAt) || startAt.isAfter(endAt))) {
             validationErrors.add(fieldName, fieldName + INCONSISTENT);
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean validateDateInTheFuture(
+            OffsetDateTime date,
+            String fieldName,
+            ValidationErrors validationErrors
+    ) {
+        if (!isNull(date) && date.isBefore(now())) {
+            validationErrors.add(fieldName, fieldName + IN_THE_PAST);
             return false;
         }
 
