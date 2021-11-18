@@ -34,12 +34,22 @@ public class AllocationValidator {
 
     private void validateEmployeeName(String employeeName, ValidationErrors validationErrors) {
         validateRequired(employeeName, ALLOCATION_EMPLOYEE_NAME, validationErrors);
-        validateMaxLength(employeeName, ALLOCATION_EMPLOYEE_NAME, ALLOCATION_EMPLOYEE_NAME_MAX_LENGTH, validationErrors);
+        validateMaxLength(
+            employeeName,
+            ALLOCATION_EMPLOYEE_NAME,
+            ALLOCATION_EMPLOYEE_NAME_MAX_LENGTH,
+            validationErrors
+        );
     }
 
     private void validateEmployeeEmail(String employeeEmail, ValidationErrors validationErrors) {
         validateRequired(employeeEmail, ALLOCATION_EMPLOYEE_EMAIL, validationErrors);
-        validateMaxLength(employeeEmail, ALLOCATION_EMPLOYEE_EMAIL, ALLOCATION_EMPLOYEE_EMAIL_MAX_LENGTH, validationErrors);
+        validateMaxLength(
+            employeeEmail,
+            ALLOCATION_EMPLOYEE_EMAIL,
+            ALLOCATION_EMPLOYEE_EMAIL_MAX_LENGTH,
+            validationErrors
+        );
     }
 
     private void validateDates(OffsetDateTime startAt, OffsetDateTime endAt, ValidationErrors validationErrors) {
@@ -51,7 +61,11 @@ public class AllocationValidator {
         validateDuration(startAt, endAt, ALLOCATION_DATES, validationErrors);
     }
 
-    private void validateIfTimeAvailable(OffsetDateTime startAt, OffsetDateTime endAt, ValidationErrors validationErrors) {
+    private void validateIfTimeAvailable(
+        OffsetDateTime startAt,
+        OffsetDateTime endAt,
+        ValidationErrors validationErrors
+    ) {
         //TODO: adicionar validação caso exista algum horario ja agendado naquele timestamp
     }
 }

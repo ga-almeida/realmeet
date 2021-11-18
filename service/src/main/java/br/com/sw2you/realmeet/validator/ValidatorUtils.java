@@ -81,10 +81,10 @@ public final class ValidatorUtils {
     }
 
     public static boolean validateDateOrdering(
-            OffsetDateTime startAt,
-            OffsetDateTime endAt,
-            String fieldName,
-            ValidationErrors validationErrors
+        OffsetDateTime startAt,
+        OffsetDateTime endAt,
+        String fieldName,
+        ValidationErrors validationErrors
     ) {
         if (!isNull(startAt) && !isNull(endAt) && (startAt.isEqual(endAt) || startAt.isAfter(endAt))) {
             validationErrors.add(fieldName, fieldName + INCONSISTENT);
@@ -95,9 +95,9 @@ public final class ValidatorUtils {
     }
 
     public static boolean validateDateInTheFuture(
-            OffsetDateTime date,
-            String fieldName,
-            ValidationErrors validationErrors
+        OffsetDateTime date,
+        String fieldName,
+        ValidationErrors validationErrors
     ) {
         if (!isNull(date) && date.isBefore(now())) {
             validationErrors.add(fieldName, fieldName + IN_THE_PAST);
@@ -108,12 +108,16 @@ public final class ValidatorUtils {
     }
 
     public static boolean validateDuration(
-            OffsetDateTime startAt,
-            OffsetDateTime endAt,
-            String fieldName,
-            ValidationErrors validationErrors
+        OffsetDateTime startAt,
+        OffsetDateTime endAt,
+        String fieldName,
+        ValidationErrors validationErrors
     ) {
-        if (!isNull(startAt) && !isNull(endAt) && (between(startAt, endAt).getSeconds() > ALLOCATION_MAX_DURATION_SECONDS)) {
+        if (
+            !isNull(startAt) &&
+            !isNull(endAt) &&
+            (between(startAt, endAt).getSeconds() > ALLOCATION_MAX_DURATION_SECONDS)
+        ) {
             validationErrors.add(fieldName, fieldName + EXCEEDS_DURATION);
             return false;
         }

@@ -33,7 +33,8 @@ public class AllocationService {
     public AllocationDTO create(CreateAllocationDTO createAllocationDTO) {
         allocationValidator.validate(createAllocationDTO);
 
-        var room = roomRepository.findById(createAllocationDTO.getRoomId())
+        var room = roomRepository
+            .findById(createAllocationDTO.getRoomId())
             .orElseThrow(() -> new RoomNotFoundException(createAllocationDTO.getRoomId()));
 
         var allocation = allocationMapper.fromCreateAllocationDtoToEntity(createAllocationDTO, room);

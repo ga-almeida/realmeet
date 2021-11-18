@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import br.com.sw2you.realmeet.api.facade.AllocationApi;
 import br.com.sw2you.realmeet.core.BaseIntegrationTest;
 import br.com.sw2you.realmeet.domain.repository.RoomRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class AllocationApiIntegrationTest extends BaseIntegrationTest {
     @Autowired
@@ -36,6 +36,4 @@ class AllocationApiIntegrationTest extends BaseIntegrationTest {
         assertTrue(createAllocationDTO.getStartAt().isEqual(allocationDTO.getStartAt()));
         assertTrue(createAllocationDTO.getEndAt().isEqual(allocationDTO.getEndAt()));
     }
-
-
 }
