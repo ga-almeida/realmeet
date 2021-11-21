@@ -9,6 +9,7 @@ import br.com.sw2you.realmeet.core.BaseIntegrationTest;
 import br.com.sw2you.realmeet.domain.repository.RoomRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.HttpClientErrorException;
 
 class AllocationApiIntegrationTest extends BaseIntegrationTest {
     @Autowired
@@ -35,5 +36,24 @@ class AllocationApiIntegrationTest extends BaseIntegrationTest {
         assertEquals(createAllocationDTO.getEmployeeEmail(), allocationDTO.getEmployeeEmail());
         assertTrue(createAllocationDTO.getStartAt().isEqual(allocationDTO.getStartAt()));
         assertTrue(createAllocationDTO.getEndAt().isEqual(allocationDTO.getEndAt()));
+    }
+
+    @Test
+    void testCreateAllocationValidationError() {
+        var room = roomRepository.saveAndFlush(newRoomBuilder().build());
+        var createAllocationDTO = newCreateAllocationDTO().roomId(room.getId());
+
+        assertThrows(
+                HttpClientErrorException.UnprocessableEntity.class,
+                () -> api.createAllocation(createAllocationDTO.subject(null))
+        );
+    }
+
+    @Test
+    void testCreateAllocationWhenRoomNotFound() {
+        assertThrows(
+                HttpClientErrorException.UnprocessableEntity.class,
+                () -> api.createAllocation(newCreateAllocationDTO())
+        );
     }
 }
