@@ -44,16 +44,16 @@ class AllocationApiIntegrationTest extends BaseIntegrationTest {
         var createAllocationDTO = newCreateAllocationDTO().roomId(room.getId());
 
         assertThrows(
-                HttpClientErrorException.UnprocessableEntity.class,
-                () -> api.createAllocation(createAllocationDTO.subject(null))
+            HttpClientErrorException.UnprocessableEntity.class,
+            () -> api.createAllocation(createAllocationDTO.subject(null))
         );
     }
 
     @Test
     void testCreateAllocationWhenRoomNotFound() {
         assertThrows(
-                HttpClientErrorException.UnprocessableEntity.class,
-                () -> api.createAllocation(newCreateAllocationDTO())
+            HttpClientErrorException.UnprocessableEntity.class,
+            () -> api.createAllocation(newCreateAllocationDTO())
         );
     }
 }
