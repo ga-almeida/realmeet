@@ -50,4 +50,44 @@ class AllocationValidatorUnitTest extends BaseUnitTest {
         assertEquals(1, exception.getValidationErrors().getNumberOfErrors());
         assertEquals(new ValidationError(ALLOCATION_SUBJECT, ALLOCATION_SUBJECT + EXCEEDS_MAX_LENGTH), exception.getValidationErrors().getError(0));
     }
+
+    @Test
+    void testValidateWhenAllocationEmployeeNameIsMissing() {
+        var exception = assertThrows(
+                InvalidRequestException.class,
+                () -> victim.validate(newCreateAllocationDTO().employeeName(null))
+        );
+        assertEquals(1, exception.getValidationErrors().getNumberOfErrors());
+        assertEquals(new ValidationError(ALLOCATION_EMPLOYEE_NAME, ALLOCATION_EMPLOYEE_NAME + MISSING), exception.getValidationErrors().getError(0));
+    }
+
+    @Test
+    void testValidateWhenAllocationEmployeeNameExceedsLength() {
+        var exception = assertThrows(
+                InvalidRequestException.class,
+                () -> victim.validate(newCreateAllocationDTO().employeeName(StringUtils.rightPad("Max", ALLOCATION_EMPLOYEE_NAME_MAX_LENGTH + 1, "EmployeeName")))
+        );
+        assertEquals(1, exception.getValidationErrors().getNumberOfErrors());
+        assertEquals(new ValidationError(ALLOCATION_EMPLOYEE_NAME, ALLOCATION_EMPLOYEE_NAME + EXCEEDS_MAX_LENGTH), exception.getValidationErrors().getError(0));
+    }
+
+    @Test
+    void testValidateWhenAllocationEmployeeEmailIsMissing() {
+        var exception = assertThrows(
+                InvalidRequestException.class,
+                () -> victim.validate(newCreateAllocationDTO().employeeEmail(null))
+        );
+        assertEquals(1, exception.getValidationErrors().getNumberOfErrors());
+        assertEquals(new ValidationError(ALLOCATION_EMPLOYEE_EMAIL, ALLOCATION_EMPLOYEE_EMAIL + MISSING), exception.getValidationErrors().getError(0));
+    }
+
+    @Test
+    void testValidateWhenAllocationEmployeeEmailExceedsLength() {
+        var exception = assertThrows(
+                InvalidRequestException.class,
+                () -> victim.validate(newCreateAllocationDTO().employeeEmail(StringUtils.rightPad("Max", ALLOCATION_EMPLOYEE_EMAIL_MAX_LENGTH + 1, "EmployeeEmail")))
+        );
+        assertEquals(1, exception.getValidationErrors().getNumberOfErrors());
+        assertEquals(new ValidationError(ALLOCATION_EMPLOYEE_EMAIL, ALLOCATION_EMPLOYEE_EMAIL + EXCEEDS_MAX_LENGTH), exception.getValidationErrors().getError(0));
+    }
 }
