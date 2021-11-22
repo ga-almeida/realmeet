@@ -21,6 +21,10 @@ public final class ResponseEntityUtils {
         return ResponseEntity.status(NOT_FOUND).body(responseError);
     }
 
+    public static <T> ResponseEntity<T> badRequest(T responseError) {
+        return ResponseEntity.status(BAD_REQUEST).body(responseError);
+    }
+
     public static <T> ResponseEntity<T> noContent(Void aVoid) {
         return ResponseEntity.status(NO_CONTENT).build();
     }

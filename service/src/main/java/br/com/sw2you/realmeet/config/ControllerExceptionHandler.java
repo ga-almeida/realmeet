@@ -1,12 +1,13 @@
 package br.com.sw2you.realmeet.config;
 
+import static br.com.sw2you.realmeet.util.ResponseEntityUtils.badRequest;
 import static br.com.sw2you.realmeet.util.ResponseEntityUtils.notFound;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import static org.springframework.http.HttpStatus.*;
 
 import br.com.sw2you.realmeet.api.model.ResponseError;
 import br.com.sw2you.realmeet.api.model.ResponseErrorItems;
 import br.com.sw2you.realmeet.exception.InvalidRequestException;
+import br.com.sw2you.realmeet.exception.badRequest.BadRequestException;
 import br.com.sw2you.realmeet.exception.notFound.NotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,11 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ResponseError> handleNotFoundException(NotFoundException exception) {
         return notFound(new ResponseError().errorCode(NOT_FOUND.getReasonPhrase()).message(exception.getMessage()));
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ResponseError> handleNotFoundException(BadRequestException exception) {
+        return badRequest(new ResponseError().errorCode(BAD_REQUEST.getReasonPhrase()).message(exception.getMessage()));
     }
 
     @ExceptionHandler(InvalidRequestException.class)

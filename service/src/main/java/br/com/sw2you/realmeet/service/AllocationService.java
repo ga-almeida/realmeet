@@ -6,7 +6,7 @@ import br.com.sw2you.realmeet.api.model.AllocationDTO;
 import br.com.sw2you.realmeet.api.model.CreateAllocationDTO;
 import br.com.sw2you.realmeet.domain.repository.AllocationRepository;
 import br.com.sw2you.realmeet.domain.repository.RoomRepository;
-import br.com.sw2you.realmeet.exception.badParameter.AllocationCannotBeDeleteException;
+import br.com.sw2you.realmeet.exception.badRequest.AllocationCannotBeDeleteException;
 import br.com.sw2you.realmeet.exception.notFound.AllocationNotFoundException;
 import br.com.sw2you.realmeet.exception.notFound.RoomNotFoundException;
 import br.com.sw2you.realmeet.mapper.AllocationMapper;
