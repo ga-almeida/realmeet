@@ -4,6 +4,8 @@ import static br.com.sw2you.realmeet.util.DateUtils.now;
 
 import br.com.sw2you.realmeet.api.model.AllocationDTO;
 import br.com.sw2you.realmeet.api.model.CreateAllocationDTO;
+import br.com.sw2you.realmeet.api.model.UpdateAllocationDTO;
+import br.com.sw2you.realmeet.domain.entity.Allocation;
 import br.com.sw2you.realmeet.domain.repository.AllocationRepository;
 import br.com.sw2you.realmeet.domain.repository.RoomRepository;
 import br.com.sw2you.realmeet.exception.badRequest.AllocationCannotBeDeleteException;
@@ -46,13 +48,28 @@ public class AllocationService {
         return allocationMapper.fromEntityToDto(allocation);
     }
 
-    public void delete(Long id) throws AllocationCannotBeDeleteException {
-        var allocation = allocationRepository.findById(id).orElseThrow(() -> new AllocationNotFoundException(id));
+    public void delete(Long id) {
+        var allocation = getAllocationOrThrow(id);
 
         if (allocation.getEndAt().isBefore(now())) {
             throw new AllocationCannotBeDeleteException(id);
         }
 
         allocationRepository.delete(allocation);
+    }
+
+    private Allocation getAllocationOrThrow(Long id) {
+        return allocationRepository.findById(id).orElseThrow(() -> new AllocationNotFoundException(id));
+    }
+
+    public void update(Long id, UpdateAllocationDTO updateAllocationDTO) {
+        getAllocationOrThrow(id);
+
+        allocationRepository.update(
+            id,
+            updateAllocationDTO.getSubject(),
+            updateAllocationDTO.getStartAt(),
+            updateAllocationDTO.getEndAt()
+        );
     }
 }

@@ -159,6 +159,37 @@ paths:
         404:
           description: Not Found
 
+    put:
+      summary: 'Update a allocation by ID'
+      operationId: updateAllocation
+      tags:
+        - allocation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAllocationDTO'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the allocation
+          schema:
+            type: integer
+            format: int64
+      responses:
+        204:
+          description: Updated success
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+        422:
+          $ref: '#/components/responses/UnprocessableEntity'
+
 components:
   schemas:
     RoomDTO:
@@ -202,6 +233,18 @@ components:
           type: string
         employeeEmail:
           type: string
+
+    UpdateAllocationDTO:
+      type: object
+      properties:
+        subject:
+          type: string
+        startAt:
+          type: string
+          format: date-time
+        endAt:
+          type: string
+          format: date-time
 
     AllocationDTO:
       type: object

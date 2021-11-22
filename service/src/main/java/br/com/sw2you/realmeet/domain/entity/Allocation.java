@@ -4,7 +4,6 @@ import static br.com.sw2you.realmeet.util.DateUtils.now;
 import static java.util.Objects.isNull;
 
 import br.com.sw2you.realmeet.domain.model.Employee;
-import br.com.sw2you.realmeet.util.DateUtils;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import javax.persistence.*;

@@ -8,9 +8,9 @@ import br.com.sw2you.realmeet.api.facade.AllocationApi;
 import br.com.sw2you.realmeet.core.BaseIntegrationTest;
 import br.com.sw2you.realmeet.domain.repository.AllocationRepository;
 import br.com.sw2you.realmeet.domain.repository.RoomRepository;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.HttpClientErrorException;
-import org.junit.jupiter.api.Test;
 
 class AllocationApiIntegrationTest extends BaseIntegrationTest {
     @Autowired
@@ -71,10 +71,7 @@ class AllocationApiIntegrationTest extends BaseIntegrationTest {
     void testDeleteAllocationInThePast() {
         var room = roomRepository.saveAndFlush(newRoomBuilder().build());
         var allocation = allocationRepository.saveAndFlush(
-            newAllocationBuilder(room)
-                .startAt(now().minusDays(1))
-                .endAt(now().minusDays(1).plusHours(1))
-                .build()
+            newAllocationBuilder(room).startAt(now().minusDays(1)).endAt(now().minusDays(1).plusHours(1)).build()
         );
 
         assertThrows(HttpClientErrorException.BadRequest.class, () -> api.deleteAllocation(allocation.getId()));
