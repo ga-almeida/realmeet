@@ -1,7 +1,9 @@
 package br.com.sw2you.realmeet.unit;
 
 import static br.com.sw2you.realmeet.util.DateUtils.now;
+import static br.com.sw2you.realmeet.utils.TestConstants.DEFAULT_ALLOCATION_ID;
 import static br.com.sw2you.realmeet.utils.TestDataCreator.newCreateAllocationDTO;
+import static br.com.sw2you.realmeet.utils.TestDataCreator.newUpdateAllocationDTO;
 import static br.com.sw2you.realmeet.validator.ValidatorConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -16,7 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-class AllocationValidatorUnitTest extends BaseUnitTest {
+class AllocationUpdateValidatorUnitTest extends BaseUnitTest {
     private AllocationValidator victim;
 
     @Mock
@@ -29,14 +31,14 @@ class AllocationValidatorUnitTest extends BaseUnitTest {
 
     @Test
     void testValidateWhenRoomIsValid() {
-        victim.validate(newCreateAllocationDTO());
+        victim.validate(DEFAULT_ALLOCATION_ID, newUpdateAllocationDTO());
     }
 
     @Test
     void testValidateWhenAllocationSubjectIsMissing() {
         var exception = assertThrows(
             InvalidRequestException.class,
-            () -> victim.validate(newCreateAllocationDTO().subject(null))
+            () -> victim.validate(DEFAULT_ALLOCATION_ID, newUpdateAllocationDTO().subject(null))
         );
         assertEquals(1, exception.getValidationErrors().getNumberOfErrors());
         assertEquals(
@@ -51,7 +53,8 @@ class AllocationValidatorUnitTest extends BaseUnitTest {
             InvalidRequestException.class,
             () ->
                 victim.validate(
-                    newCreateAllocationDTO()
+                    DEFAULT_ALLOCATION_ID,
+                    newUpdateAllocationDTO()
                         .subject(StringUtils.rightPad("Max", ALLOCATION_SUBJECT_MAX_LENGTH + 1, "Subject"))
                 )
         );
@@ -63,74 +66,10 @@ class AllocationValidatorUnitTest extends BaseUnitTest {
     }
 
     @Test
-    void testValidateWhenAllocationEmployeeNameIsMissing() {
-        var exception = assertThrows(
-            InvalidRequestException.class,
-            () -> victim.validate(newCreateAllocationDTO().employeeName(null))
-        );
-        assertEquals(1, exception.getValidationErrors().getNumberOfErrors());
-        assertEquals(
-            new ValidationError(ALLOCATION_EMPLOYEE_NAME, ALLOCATION_EMPLOYEE_NAME + MISSING),
-            exception.getValidationErrors().getError(0)
-        );
-    }
-
-    @Test
-    void testValidateWhenAllocationEmployeeNameExceedsLength() {
-        var exception = assertThrows(
-            InvalidRequestException.class,
-            () ->
-                victim.validate(
-                    newCreateAllocationDTO()
-                        .employeeName(
-                            StringUtils.rightPad("Max", ALLOCATION_EMPLOYEE_NAME_MAX_LENGTH + 1, "EmployeeName")
-                        )
-                )
-        );
-        assertEquals(1, exception.getValidationErrors().getNumberOfErrors());
-        assertEquals(
-            new ValidationError(ALLOCATION_EMPLOYEE_NAME, ALLOCATION_EMPLOYEE_NAME + EXCEEDS_MAX_LENGTH),
-            exception.getValidationErrors().getError(0)
-        );
-    }
-
-    @Test
-    void testValidateWhenAllocationEmployeeEmailIsMissing() {
-        var exception = assertThrows(
-            InvalidRequestException.class,
-            () -> victim.validate(newCreateAllocationDTO().employeeEmail(null))
-        );
-        assertEquals(1, exception.getValidationErrors().getNumberOfErrors());
-        assertEquals(
-            new ValidationError(ALLOCATION_EMPLOYEE_EMAIL, ALLOCATION_EMPLOYEE_EMAIL + MISSING),
-            exception.getValidationErrors().getError(0)
-        );
-    }
-
-    @Test
-    void testValidateWhenAllocationEmployeeEmailExceedsLength() {
-        var exception = assertThrows(
-            InvalidRequestException.class,
-            () ->
-                victim.validate(
-                    newCreateAllocationDTO()
-                        .employeeEmail(
-                            StringUtils.rightPad("Max", ALLOCATION_EMPLOYEE_EMAIL_MAX_LENGTH + 1, "EmployeeEmail")
-                        )
-                )
-        );
-        assertEquals(1, exception.getValidationErrors().getNumberOfErrors());
-        assertEquals(
-            new ValidationError(ALLOCATION_EMPLOYEE_EMAIL, ALLOCATION_EMPLOYEE_EMAIL + EXCEEDS_MAX_LENGTH),
-            exception.getValidationErrors().getError(0)
-        );
-    }
-
-    @Test
     void testValidateWhenAllocationStartAtIsMissing() {
         var exception = assertThrows(
             InvalidRequestException.class,
-            () -> victim.validate(newCreateAllocationDTO().startAt(null))
+            () -> victim.validate(DEFAULT_ALLOCATION_ID, newUpdateAllocationDTO().startAt(null))
         );
         assertEquals(1, exception.getValidationErrors().getNumberOfErrors());
         assertEquals(
@@ -143,7 +82,7 @@ class AllocationValidatorUnitTest extends BaseUnitTest {
     void testValidateWhenAllocationStartAtInTheFuture() {
         var exception = assertThrows(
             InvalidRequestException.class,
-            () -> victim.validate(newCreateAllocationDTO().startAt(now().minusHours(2)).endAt(now().plusHours(1)))
+            () -> victim.validate(DEFAULT_ALLOCATION_ID, newUpdateAllocationDTO().startAt(now().minusHours(2)).endAt(now().plusHours(1)))
         );
         assertEquals(1, exception.getValidationErrors().getNumberOfErrors());
         assertEquals(
@@ -153,10 +92,10 @@ class AllocationValidatorUnitTest extends BaseUnitTest {
     }
 
     @Test
-    void testValidateWhenAllocationEndtAtIsMissing() {
+    void testValidateWhenAllocationEndAtIsMissing() {
         var exception = assertThrows(
             InvalidRequestException.class,
-            () -> victim.validate(newCreateAllocationDTO().endAt(null))
+            () -> victim.validate(DEFAULT_ALLOCATION_ID, newUpdateAllocationDTO().endAt(null))
         );
         assertEquals(1, exception.getValidationErrors().getNumberOfErrors());
         assertEquals(
@@ -169,7 +108,7 @@ class AllocationValidatorUnitTest extends BaseUnitTest {
     void testValidateWhenAllocationEndAtInTheFuture() {
         var exception = assertThrows(
             InvalidRequestException.class,
-            () -> victim.validate(newCreateAllocationDTO().startAt(now().plusHours(1)).endAt(now().minusHours(1)))
+            () -> victim.validate(DEFAULT_ALLOCATION_ID, newUpdateAllocationDTO().startAt(now().plusHours(1)).endAt(now().minusHours(1)))
         );
         assertEquals(
             new ValidationError(ALLOCATION_END_AT, ALLOCATION_END_AT + IN_THE_PAST),
@@ -181,7 +120,7 @@ class AllocationValidatorUnitTest extends BaseUnitTest {
     void testValidateWhenAllocationDateOrdering() {
         var exception = assertThrows(
             InvalidRequestException.class,
-            () -> victim.validate(newCreateAllocationDTO().startAt(now().plusDays(1)).endAt(now()))
+            () -> victim.validate(DEFAULT_ALLOCATION_ID, newUpdateAllocationDTO().startAt(now().plusDays(1)).endAt(now()))
         );
         assertEquals(
             new ValidationError(ALLOCATION_DATES, ALLOCATION_DATES + INCONSISTENT),
@@ -193,11 +132,23 @@ class AllocationValidatorUnitTest extends BaseUnitTest {
     void testValidateWhenAllocationDuration() {
         var exception = assertThrows(
             InvalidRequestException.class,
-            () -> victim.validate(newCreateAllocationDTO().endAt(now().plusDays(2)))
+            () -> victim.validate(DEFAULT_ALLOCATION_ID, newUpdateAllocationDTO().endAt(now().plusDays(2)))
         );
         assertEquals(
             new ValidationError(ALLOCATION_DATES, ALLOCATION_DATES + EXCEEDS_DURATION),
             exception.getValidationErrors().getError(0)
+        );
+    }
+
+    @Test
+    void testValidateWhenAllocationIdNull() {
+        var exception = assertThrows(
+                InvalidRequestException.class,
+                () -> victim.validate(null, newUpdateAllocationDTO())
+        );
+        assertEquals(
+                new ValidationError(ALLOCATION_ID, ALLOCATION_ID + MISSING),
+                exception.getValidationErrors().getError(0)
         );
     }
 }
