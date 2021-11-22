@@ -17,6 +17,7 @@ import br.com.sw2you.realmeet.mapper.AllocationMapper;
 import br.com.sw2you.realmeet.util.DateUtils;
 import br.com.sw2you.realmeet.validator.AllocationValidator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AllocationService {
@@ -65,6 +66,7 @@ public class AllocationService {
         return allocationRepository.findById(id).orElseThrow(() -> new AllocationNotFoundException(id));
     }
 
+    @Transactional
     public void update(Long id, UpdateAllocationDTO updateAllocationDTO) {
         var allocation = getAllocationOrThrow(id);
 

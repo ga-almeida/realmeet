@@ -82,7 +82,11 @@ class AllocationUpdateValidatorUnitTest extends BaseUnitTest {
     void testValidateWhenAllocationStartAtInTheFuture() {
         var exception = assertThrows(
             InvalidRequestException.class,
-            () -> victim.validate(DEFAULT_ALLOCATION_ID, newUpdateAllocationDTO().startAt(now().minusHours(2)).endAt(now().plusHours(1)))
+            () ->
+                victim.validate(
+                    DEFAULT_ALLOCATION_ID,
+                    newUpdateAllocationDTO().startAt(now().minusHours(2)).endAt(now().plusHours(1))
+                )
         );
         assertEquals(1, exception.getValidationErrors().getNumberOfErrors());
         assertEquals(
@@ -108,7 +112,11 @@ class AllocationUpdateValidatorUnitTest extends BaseUnitTest {
     void testValidateWhenAllocationEndAtInTheFuture() {
         var exception = assertThrows(
             InvalidRequestException.class,
-            () -> victim.validate(DEFAULT_ALLOCATION_ID, newUpdateAllocationDTO().startAt(now().plusHours(1)).endAt(now().minusHours(1)))
+            () ->
+                victim.validate(
+                    DEFAULT_ALLOCATION_ID,
+                    newUpdateAllocationDTO().startAt(now().plusHours(1)).endAt(now().minusHours(1))
+                )
         );
         assertEquals(
             new ValidationError(ALLOCATION_END_AT, ALLOCATION_END_AT + IN_THE_PAST),
@@ -120,7 +128,7 @@ class AllocationUpdateValidatorUnitTest extends BaseUnitTest {
     void testValidateWhenAllocationDateOrdering() {
         var exception = assertThrows(
             InvalidRequestException.class,
-            () -> victim.validate(DEFAULT_ALLOCATION_ID, newUpdateAllocationDTO().startAt(now().plusDays(1)).endAt(now()))
+            () -> victim.validate(DEFAULT_ALLOCATION_ID, newUpdateAllocationDTO().endAt(now()))
         );
         assertEquals(
             new ValidationError(ALLOCATION_DATES, ALLOCATION_DATES + INCONSISTENT),
@@ -143,12 +151,12 @@ class AllocationUpdateValidatorUnitTest extends BaseUnitTest {
     @Test
     void testValidateWhenAllocationIdNull() {
         var exception = assertThrows(
-                InvalidRequestException.class,
-                () -> victim.validate(null, newUpdateAllocationDTO())
+            InvalidRequestException.class,
+            () -> victim.validate(null, newUpdateAllocationDTO())
         );
         assertEquals(
-                new ValidationError(ALLOCATION_ID, ALLOCATION_ID + MISSING),
-                exception.getValidationErrors().getError(0)
+            new ValidationError(ALLOCATION_ID, ALLOCATION_ID + MISSING),
+            exception.getValidationErrors().getError(0)
         );
     }
 }

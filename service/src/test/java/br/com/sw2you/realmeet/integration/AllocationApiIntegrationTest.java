@@ -1,13 +1,17 @@
 package br.com.sw2you.realmeet.integration;
 
 import static br.com.sw2you.realmeet.util.DateUtils.now;
+import static br.com.sw2you.realmeet.utils.TestConstants.*;
 import static br.com.sw2you.realmeet.utils.TestDataCreator.*;
+import static java.time.temporal.ChronoUnit.MILLIS;
+import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.junit.jupiter.api.Assertions.*;
 
 import br.com.sw2you.realmeet.api.facade.AllocationApi;
 import br.com.sw2you.realmeet.core.BaseIntegrationTest;
 import br.com.sw2you.realmeet.domain.repository.AllocationRepository;
 import br.com.sw2you.realmeet.domain.repository.RoomRepository;
+import java.time.temporal.ChronoUnit;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.HttpClientErrorException;
@@ -80,5 +84,48 @@ class AllocationApiIntegrationTest extends BaseIntegrationTest {
     @Test
     void testDeleteAllocationNotFound() {
         assertThrows(HttpClientErrorException.NotFound.class, () -> api.deleteAllocation(1L));
+    }
+
+    @Test
+    void testUpdateSuccess() {
+        var room = roomRepository.saveAndFlush(newRoomBuilder().build());
+        var createAllocationDTO = newCreateAllocationDTO().roomId(room.getId());
+        var allocationDTO = api.createAllocation(createAllocationDTO);
+
+        var updateAllocationDTO = newUpdateAllocationDTO()
+            .subject(DEFAULT_ALLOCATION_SUBJECT + "teste")
+            .startAt(DEFAULT_ALLOCATION_START_AT.plusDays(1))
+            .endAt(DEFAULT_ALLOCATION_END_AT.plusDays(1).plusHours(3));
+
+        api.updateAllocation(allocationDTO.getId(), updateAllocationDTO);
+
+        var updateAllocation = allocationRepository.findById(allocationDTO.getId()).orElseThrow();
+        assertEquals(updateAllocationDTO.getSubject(), updateAllocation.getSubject());
+
+        assertEquals(
+            updateAllocationDTO.getStartAt().truncatedTo(SECONDS),
+            updateAllocation.getStartAt().truncatedTo(SECONDS)
+        );
+        assertEquals(
+            updateAllocationDTO.getEndAt().truncatedTo(SECONDS),
+            updateAllocation.getEndAt().truncatedTo(SECONDS)
+        );
+    }
+
+    @Test
+    void testUpdateAllocationDoestNotExists() {
+        assertThrows(HttpClientErrorException.NotFound.class, () -> api.updateAllocation(1L, newUpdateAllocationDTO()));
+    }
+
+    @Test
+    void testUpdateAllocationValidationError() {
+        var room = roomRepository.saveAndFlush(newRoomBuilder().build());
+        var createAllocationDTO = newCreateAllocationDTO().roomId(room.getId());
+        var allocationDTO = api.createAllocation(createAllocationDTO);
+
+        assertThrows(
+            HttpClientErrorException.UnprocessableEntity.class,
+            () -> api.updateAllocation(allocationDTO.getId(), newUpdateAllocationDTO().subject(null))
+        );
     }
 }
