@@ -1,5 +1,6 @@
 package br.com.sw2you.realmeet.service;
 
+import static br.com.sw2you.realmeet.util.DateUtils.isPast;
 import static br.com.sw2you.realmeet.util.DateUtils.now;
 
 import br.com.sw2you.realmeet.api.model.AllocationDTO;
@@ -9,9 +10,11 @@ import br.com.sw2you.realmeet.domain.entity.Allocation;
 import br.com.sw2you.realmeet.domain.repository.AllocationRepository;
 import br.com.sw2you.realmeet.domain.repository.RoomRepository;
 import br.com.sw2you.realmeet.exception.badRequest.AllocationCannotBeDeleteException;
+import br.com.sw2you.realmeet.exception.badRequest.AllocationCannotBeUpdatedException;
 import br.com.sw2you.realmeet.exception.notFound.AllocationNotFoundException;
 import br.com.sw2you.realmeet.exception.notFound.RoomNotFoundException;
 import br.com.sw2you.realmeet.mapper.AllocationMapper;
+import br.com.sw2you.realmeet.util.DateUtils;
 import br.com.sw2you.realmeet.validator.AllocationValidator;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +54,7 @@ public class AllocationService {
     public void delete(Long id) {
         var allocation = getAllocationOrThrow(id);
 
-        if (allocation.getEndAt().isBefore(now())) {
+        if (isPast(allocation.getEndAt())) {
             throw new AllocationCannotBeDeleteException(id);
         }
 
@@ -63,7 +66,13 @@ public class AllocationService {
     }
 
     public void update(Long id, UpdateAllocationDTO updateAllocationDTO) {
-        getAllocationOrThrow(id);
+        var allocation = getAllocationOrThrow(id);
+
+        if (isPast(allocation.getEndAt())) {
+            throw new AllocationCannotBeUpdatedException(id);
+        }
+
+        allocationValidator.validate(id, updateAllocationDTO);
 
         allocationRepository.update(
             id,

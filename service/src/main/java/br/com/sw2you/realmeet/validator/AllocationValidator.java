@@ -4,6 +4,7 @@ import static br.com.sw2you.realmeet.validator.ValidatorConstants.*;
 import static br.com.sw2you.realmeet.validator.ValidatorUtils.*;
 
 import br.com.sw2you.realmeet.api.model.CreateAllocationDTO;
+import br.com.sw2you.realmeet.api.model.UpdateAllocationDTO;
 import br.com.sw2you.realmeet.domain.repository.AllocationRepository;
 import java.time.OffsetDateTime;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,16 @@ public class AllocationValidator {
 
     public AllocationValidator(AllocationRepository allocationRepository) {
         this.allocationRepository = allocationRepository;
+    }
+
+    public void validate(Long id, UpdateAllocationDTO updateAllocationDTO) {
+        var validationErrors = new ValidationErrors();
+
+        validateRequired(id, ALLOCATION_ID, validationErrors);
+        validateSubject(updateAllocationDTO.getSubject(), validationErrors);
+        validateDates(updateAllocationDTO.getStartAt(), updateAllocationDTO.getEndAt(), validationErrors);
+
+        throwOnError(validationErrors);
     }
 
     public void validate(CreateAllocationDTO createAllocationDTO) {

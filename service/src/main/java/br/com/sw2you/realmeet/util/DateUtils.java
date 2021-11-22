@@ -11,4 +11,8 @@ public final class DateUtils {
     public static OffsetDateTime now() {
         return OffsetDateTime.now(DEFAULT_TIMEZONE);
     }
+
+    public static boolean isPast(OffsetDateTime date) {
+        return date.isBefore(now());
+    }
 }
