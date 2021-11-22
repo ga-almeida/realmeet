@@ -28,6 +28,10 @@ paths:
                 $ref: '#/components/schemas/RoomDTO'
         404:
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
 
     put:
       summary: 'Update a room by ID'
@@ -53,6 +57,10 @@ paths:
           description: Updated success
         404:
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
         422:
           $ref: '#/components/responses/UnprocessableEntity'
 
@@ -74,6 +82,10 @@ paths:
           description: Delete success
         404:
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
 
   /rooms:
     post:
@@ -118,8 +130,34 @@ paths:
                 $ref: '#/components/schemas/AllocationDTO'
         404:
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
         422:
           $ref: '#/components/responses/UnprocessableEntity'
+
+  /allocations/{id}:
+    delete:
+      summary: 'Delete a allocation by ID'
+      operationId: deleteAllocation
+      tags:
+        - allocation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the allocation
+          schema:
+            type: integer
+            format: int64
+      responses:
+        204:
+          description: Delete success
+        400:
+          description: Bad Parameter
+        404:
+          description: Not Found
 
 components:
   schemas:
@@ -187,13 +225,24 @@ components:
         employeeEmail:
           type: string
 
-    ResponseError:
+    ResponseErrorItems:
       type: object
       required:
         - field
         - errorCode
       properties:
         field:
+          type: string
+        errorCode:
+          type: string
+
+    ResponseError:
+      type: object
+      required:
+        - message
+        - errorCode
+      properties:
+        message:
           type: string
         errorCode:
           type: string
@@ -206,4 +255,4 @@ components:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/ResponseError'
+              $ref: '#/components/schemas/ResponseErrorItems'

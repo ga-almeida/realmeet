@@ -2,6 +2,7 @@ package br.com.sw2you.realmeet.util;
 
 import static org.springframework.http.HttpStatus.*;
 
+import br.com.sw2you.realmeet.api.model.ResponseError;
 import org.springframework.http.ResponseEntity;
 
 public final class ResponseEntityUtils {
@@ -16,8 +17,8 @@ public final class ResponseEntityUtils {
         return ResponseEntity.status(CREATED).body(body);
     }
 
-    public static <T> ResponseEntity<T> notFound() {
-        return ResponseEntity.status(NOT_FOUND).build();
+    public static <T> ResponseEntity<T> notFound(T responseError) {
+        return ResponseEntity.status(NOT_FOUND).body(responseError);
     }
 
     public static <T> ResponseEntity<T> noContent(Void aVoid) {

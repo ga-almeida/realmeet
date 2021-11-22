@@ -12,7 +12,7 @@ import static org.mockito.Mockito.when;
 
 import br.com.sw2you.realmeet.core.BaseUnitTest;
 import br.com.sw2you.realmeet.domain.repository.RoomRepository;
-import br.com.sw2you.realmeet.exception.RoomNotFoundException;
+import br.com.sw2you.realmeet.exception.notFound.RoomNotFoundException;
 import br.com.sw2you.realmeet.service.RoomService;
 import br.com.sw2you.realmeet.validator.RoomValidator;
 import java.util.Optional;
