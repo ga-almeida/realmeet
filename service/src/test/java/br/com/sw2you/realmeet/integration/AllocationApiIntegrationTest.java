@@ -164,4 +164,19 @@ class AllocationApiIntegrationTest extends BaseIntegrationTest {
         var allocations = api.listAllocation(employee1.getEmail(), null, null, null);
         assertEquals(2, allocations.size());
     }
+
+    @Test
+    void filterAllocationsDateInterval() {
+        var baseStartAt = now().plusDays(2).withHour(14).withMinute(0);
+        var baseEndAt = now().plusDays(4).withHour(20).withMinute(0);
+
+        var room1 = roomRepository.saveAndFlush(newRoomBuilder().name(DEFAULT_ROOM_NAME + "1").build());
+
+        allocationRepository.saveAndFlush(newAllocationBuilder(room1).startAt(baseStartAt.plusHours(1)).endAt(baseStartAt.plusHours(2)).build());
+        allocationRepository.saveAndFlush(newAllocationBuilder(room1).startAt(baseStartAt.plusHours(5)).endAt(baseStartAt.plusHours(6)).build());
+        allocationRepository.saveAndFlush(newAllocationBuilder(room1).startAt(baseEndAt.plusDays(1).plusHours(1)).endAt(baseEndAt.plusDays(1).plusHours(2)).build());
+
+        var allocations = api.listAllocation(null, null, baseStartAt.toLocalDate(), baseEndAt.toLocalDate());
+        assertEquals(2, allocations.size());
+    }
 }
