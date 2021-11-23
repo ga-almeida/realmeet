@@ -24,7 +24,7 @@ public interface AllocationRepository extends JpaRepository<Allocation, Long> {
     @Query(
         "select a from Allocation a where " +
             "(:employeeEmail is null or a.employee.email = :employeeEmail) and " +
-            "(:roomId is null or a.roomId = :roomId) and " +
+            "(:roomId is null or a.room.id = :roomId) and " +
             "(:startAt is null or a.startAt >= :startAt) and " +
             "(:endAt is null or a.endAt <= :endAt)"
     )

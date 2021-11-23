@@ -3,7 +3,6 @@ package br.com.sw2you.realmeet.integration;
 import static br.com.sw2you.realmeet.util.DateUtils.now;
 import static br.com.sw2you.realmeet.utils.TestConstants.*;
 import static br.com.sw2you.realmeet.utils.TestDataCreator.*;
-import static java.time.temporal.ChronoUnit.MILLIS;
 import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,10 +10,9 @@ import br.com.sw2you.realmeet.api.facade.AllocationApi;
 import br.com.sw2you.realmeet.core.BaseIntegrationTest;
 import br.com.sw2you.realmeet.domain.repository.AllocationRepository;
 import br.com.sw2you.realmeet.domain.repository.RoomRepository;
-import java.time.temporal.ChronoUnit;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.HttpClientErrorException;
+import org.junit.jupiter.api.Test;
 
 class AllocationApiIntegrationTest extends BaseIntegrationTest {
     @Autowired
@@ -127,5 +125,16 @@ class AllocationApiIntegrationTest extends BaseIntegrationTest {
             HttpClientErrorException.UnprocessableEntity.class,
             () -> api.updateAllocation(allocationDTO.getId(), newUpdateAllocationDTO().subject(null))
         );
+    }
+
+    @Test
+    void filterAllocations() {
+        var room = roomRepository.saveAndFlush(newRoomBuilder().build());
+        var allocation1 = allocationRepository.saveAndFlush(newAllocationBuilder(room).subject(DEFAULT_ALLOCATION_SUBJECT + "1").build());
+        var allocation2 = allocationRepository.saveAndFlush(newAllocationBuilder(room).subject(DEFAULT_ALLOCATION_SUBJECT + "2").build());
+        var allocation3 = allocationRepository.saveAndFlush(newAllocationBuilder(room).subject(DEFAULT_ALLOCATION_SUBJECT + "2").build());
+
+        var allocations = api.listAllocation(null, null, null, null);
+        assertEquals(3, allocations.size());
     }
 }
