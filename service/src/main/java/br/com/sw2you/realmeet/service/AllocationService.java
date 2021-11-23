@@ -16,6 +16,8 @@ import br.com.sw2you.realmeet.exception.notFound.RoomNotFoundException;
 import br.com.sw2you.realmeet.mapper.AllocationMapper;
 import br.com.sw2you.realmeet.util.DateUtils;
 import br.com.sw2you.realmeet.validator.AllocationValidator;
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,5 +84,9 @@ public class AllocationService {
             updateAllocationDTO.getStartAt(),
             updateAllocationDTO.getEndAt()
         );
+    }
+
+    public List<AllocationDTO> list(String employeeEmail, Long roomId, LocalDate startAt, LocalDate endAt) {
+        return null;
     }
 }
