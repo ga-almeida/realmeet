@@ -130,11 +130,38 @@ class AllocationApiIntegrationTest extends BaseIntegrationTest {
     @Test
     void filterAllocations() {
         var room = roomRepository.saveAndFlush(newRoomBuilder().build());
-        var allocation1 = allocationRepository.saveAndFlush(newAllocationBuilder(room).subject(DEFAULT_ALLOCATION_SUBJECT + "1").build());
-        var allocation2 = allocationRepository.saveAndFlush(newAllocationBuilder(room).subject(DEFAULT_ALLOCATION_SUBJECT + "2").build());
-        var allocation3 = allocationRepository.saveAndFlush(newAllocationBuilder(room).subject(DEFAULT_ALLOCATION_SUBJECT + "2").build());
+        allocationRepository.saveAndFlush(newAllocationBuilder(room).subject(DEFAULT_ALLOCATION_SUBJECT + "1").build());
+        allocationRepository.saveAndFlush(newAllocationBuilder(room).subject(DEFAULT_ALLOCATION_SUBJECT + "2").build());
+        allocationRepository.saveAndFlush(newAllocationBuilder(room).subject(DEFAULT_ALLOCATION_SUBJECT + "3").build());
 
         var allocations = api.listAllocation(null, null, null, null);
         assertEquals(3, allocations.size());
+    }
+
+    @Test
+    void filterAllocationsByRoomId() {
+        var room1 = roomRepository.saveAndFlush(newRoomBuilder().name(DEFAULT_ROOM_NAME + "1").build());
+        var room2 = roomRepository.saveAndFlush(newRoomBuilder().name(DEFAULT_ROOM_NAME + "2").build());
+
+        allocationRepository.saveAndFlush(newAllocationBuilder(room1).subject(DEFAULT_ALLOCATION_SUBJECT + "1").build());
+        allocationRepository.saveAndFlush(newAllocationBuilder(room2).subject(DEFAULT_ALLOCATION_SUBJECT + "2").build());
+        allocationRepository.saveAndFlush(newAllocationBuilder(room2).subject(DEFAULT_ALLOCATION_SUBJECT + "3").build());
+
+        var allocations = api.listAllocation(null, room2.getId(), null, null);
+        assertEquals(2, allocations.size());
+    }
+
+    @Test
+    void filterAllocationsByEmployeeEmail() {
+        var room1 = roomRepository.saveAndFlush(newRoomBuilder().name(DEFAULT_ROOM_NAME + "1").build());
+        var employee1 = newEmployeeBuilder().build();
+        var employee2 = newEmployeeBuilder().email(DEFAULT_ALLOCATION_EMAIL + "2").build();
+
+        allocationRepository.saveAndFlush(newAllocationBuilder(room1).employee(employee1).build());
+        allocationRepository.saveAndFlush(newAllocationBuilder(room1).employee(employee1).build());
+        allocationRepository.saveAndFlush(newAllocationBuilder(room1).employee(employee2).build());
+
+        var allocations = api.listAllocation(employee1.getEmail(), null, null, null);
+        assertEquals(2, allocations.size());
     }
 }
