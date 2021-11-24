@@ -10,9 +10,9 @@ import br.com.sw2you.realmeet.api.facade.AllocationApi;
 import br.com.sw2you.realmeet.core.BaseIntegrationTest;
 import br.com.sw2you.realmeet.domain.repository.AllocationRepository;
 import br.com.sw2you.realmeet.domain.repository.RoomRepository;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.HttpClientErrorException;
-import org.junit.jupiter.api.Test;
 
 class AllocationApiIntegrationTest extends BaseIntegrationTest {
     @Autowired
@@ -140,12 +140,18 @@ class AllocationApiIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void filterAllocationsByRoomId() {
-        var room1 = roomRepository.saveAndFlush(newRoomBuilder().name(DEFAULT_ROOM_NAME + "1").build());
+        var room1 = roomRepository.saveAndFlush(newRoomBuilder().build());
         var room2 = roomRepository.saveAndFlush(newRoomBuilder().name(DEFAULT_ROOM_NAME + "2").build());
 
-        allocationRepository.saveAndFlush(newAllocationBuilder(room1).subject(DEFAULT_ALLOCATION_SUBJECT + "1").build());
-        allocationRepository.saveAndFlush(newAllocationBuilder(room2).subject(DEFAULT_ALLOCATION_SUBJECT + "2").build());
-        allocationRepository.saveAndFlush(newAllocationBuilder(room2).subject(DEFAULT_ALLOCATION_SUBJECT + "3").build());
+        allocationRepository.saveAndFlush(
+            newAllocationBuilder(room1).subject(DEFAULT_ALLOCATION_SUBJECT + "1").build()
+        );
+        allocationRepository.saveAndFlush(
+            newAllocationBuilder(room2).subject(DEFAULT_ALLOCATION_SUBJECT + "2").build()
+        );
+        allocationRepository.saveAndFlush(
+            newAllocationBuilder(room2).subject(DEFAULT_ALLOCATION_SUBJECT + "3").build()
+        );
 
         var allocations = api.listAllocation(null, room2.getId(), null, null);
         assertEquals(2, allocations.size());
@@ -172,9 +178,18 @@ class AllocationApiIntegrationTest extends BaseIntegrationTest {
 
         var room1 = roomRepository.saveAndFlush(newRoomBuilder().name(DEFAULT_ROOM_NAME + "1").build());
 
-        allocationRepository.saveAndFlush(newAllocationBuilder(room1).startAt(baseStartAt.plusHours(1)).endAt(baseStartAt.plusHours(2)).build());
-        allocationRepository.saveAndFlush(newAllocationBuilder(room1).startAt(baseStartAt.plusHours(5)).endAt(baseStartAt.plusHours(6)).build());
-        allocationRepository.saveAndFlush(newAllocationBuilder(room1).startAt(baseEndAt.plusDays(1).plusHours(1)).endAt(baseEndAt.plusDays(1).plusHours(2)).build());
+        allocationRepository.saveAndFlush(
+            newAllocationBuilder(room1).startAt(baseStartAt.plusHours(1)).endAt(baseStartAt.plusHours(2)).build()
+        );
+        allocationRepository.saveAndFlush(
+            newAllocationBuilder(room1).startAt(baseStartAt.plusHours(5)).endAt(baseStartAt.plusHours(6)).build()
+        );
+        allocationRepository.saveAndFlush(
+            newAllocationBuilder(room1)
+                .startAt(baseEndAt.plusDays(1).plusHours(1))
+                .endAt(baseEndAt.plusDays(1).plusHours(2))
+                .build()
+        );
 
         var allocations = api.listAllocation(null, null, baseStartAt.toLocalDate(), baseEndAt.toLocalDate());
         assertEquals(2, allocations.size());
